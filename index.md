@@ -9,6 +9,7 @@ Utilizando o programa exemplos/pixels.cpp como referência, implemente um progra
 **implementação em c++**
 
 {% highlight c++ %}
+
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
