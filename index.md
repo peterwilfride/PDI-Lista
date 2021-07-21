@@ -1,8 +1,5 @@
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
+### PROCESSAMENTO DIGITAL DE IMAGENS
+## Resolução dos exercicos práticos
 
 - Bulleted
 - List

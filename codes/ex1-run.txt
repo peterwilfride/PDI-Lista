@@ -1,0 +1,5 @@
+cyber pixels 
+$ ./regions biel.png 
+Coordenadas de P1: 30 50
+Coordenadas de P2: 100 230
+
