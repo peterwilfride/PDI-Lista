@@ -53,7 +53,8 @@ Coordenadas de P2: 100 230
 
 **Comparações entre a imagem original e o resultado obtido**
 
-![Image](images/ex1/biel.png) ![Image](images/ex1/ex1.png)
+![Image](images/ex2/biel.png) ![Image](images/ex2/ex1.png)
+
 
 ### Exemplo 2.2
 Utilizando o programa exemplos/pixels.cpp como referência, implemente um programa trocaregioes.cpp. Seu programa deverá trocar os quadrantes em diagonal na imagem.
@@ -109,7 +110,7 @@ $ ./trocaregioes biel.png
 
 **Resultados**
 
-![Image](images/ex1/ex2.png)
+![Image](images/ex2/ex2.png)
 
 ## Tutorial 3
 ### Exemplo 3.1
@@ -195,7 +196,7 @@ int main(int argc, char** argv){
 
 **Resultados**
 
-![Image](images/ex2/bolhas1.png) ![Image](images/ex2/labeling.png)
+![Image](images/ex3/bolhas1.png) ![Image](images/ex3/labeling.png)
 
 ## Tutorial 4
 ### Exemplo 4.1
