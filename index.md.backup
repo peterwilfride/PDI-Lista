@@ -779,6 +779,113 @@ int main(int argc, char** argv) {
 
 ![Image](images/ex7/Screenshot_20210825_165922.png)
 
-Na esquerda temos a imagem original, bastante escura e difícil de visualizar algumas regiões e na direita a imagem após aplicação do filtro homomórfico
+Na esquerda temos a imagem original, bastante escura e difícil de visualizar algumas regiões e na direita a imagem após aplicação do filtro homomórfico.
 
+## Tutorial 8
+### Exemplo 8.1
 
+Utilizando os programas exemplos/canny.cpp e exemplos/pontilhismo.cpp como referência, implemente um programa cannypoints.cpp. A idéia é usar as bordas produzidas pelo algoritmo de Canny para melhorar a qualidade da imagem pontilhista gerada.
+
+**Implementação**
+
+~~~C++
+#include <numeric>
+#include <ctime>
+#include <cstdlib>
+#include <opencv2/opencv.hpp>
+
+using namespace std;
+using namespace cv;
+
+#define STEP 2
+#define JITTER 1
+
+int slider = 1;
+int slider_max = 200;
+
+char TrackbarName[50];
+
+Mat original, cinza, border,output;
+int width, height;
+Vec3b colors;
+int x, y;
+vector<int> yrange;
+vector<int> xrange;
+
+void on_trackbar_canny(int, void*){
+
+  Canny(cinza, border, slider, 3*slider);
+  imshow("bordas", border);
+  
+  output = Mat(height, width, CV_8UC3, Scalar(255,255,255));
+  for(int i = 0; i < width; i++){
+    for(int j = 0; j < height; j++){
+      if(border.at<uchar>(j,i) == 255)
+      {
+          x = i+rand()%(2*JITTER)-JITTER+1;
+          y = j+rand()%(2*JITTER)-JITTER+1;
+          colors = original.at<Vec3b>(y,x);
+          circle(output,
+                 cv::Point(x,y),
+                 1,
+                 CV_RGB(colors[2],colors[1],colors[0]),
+                 -1,
+                 LINE_AA);
+      }
+    }
+  }
+  imshow("canny",output);
+
+}
+
+int main(int argc, char**argv){
+
+  original= imread(argv[1],IMREAD_COLOR);
+
+  cvtColor(original,cinza, COLOR_BGR2GRAY);
+
+  srand(time(0));
+
+  width=original.size().width;
+  height=original.size().height;
+
+  xrange.resize(height/STEP);
+  yrange.resize(width/STEP);
+
+  iota(xrange.begin(), xrange.end(), 0);
+  iota(yrange.begin(), yrange.end(), 0);
+
+  for(uint i=0; i<xrange.size(); i++){
+    xrange[i]= xrange[i]*STEP+STEP/2;
+  }
+
+  for(uint i=0; i<yrange.size(); i++){
+    yrange[i]= yrange[i]*STEP+STEP/2;
+  }
+
+  
+  sprintf(TrackbarName,"Threshold_inferior-%d",slider_max);
+  namedWindow("canny",1);
+  createTrackbar( TrackbarName, "canny",
+                &slider,
+                slider_max,
+                on_trackbar_canny );
+
+  on_trackbar_canny(slider, 0);
+
+  waitKey();
+  imwrite("bordas.png",border);
+  imwrite("cannypontos.png",output);
+  return 0;
+}
+~~~
+
+**Resultado**
+
+Imagem orignal
+
+![Image](images/ex8/praia.jpg)
+
+Imagem pontilhada gerada sobre o canny
+
+![Image](images/ex8/cannypontos.png)
