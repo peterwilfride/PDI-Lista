@@ -779,6 +779,6 @@ int main(int argc, char** argv) {
 
 ![Image](images/ex7/Screenshot_20210825_165922.png)
 
-Na esquerda temos a imagem original, bastante escura e difícil de visualizar algumas regiões e na direita a imagem após aplicação do filtro homomórfico.
+Na esquerda temos a imagem original, bastante escura e difícil de visualizar algumas regiões e na direita a imagem após aplicação do filtro homomórfico
 
 
