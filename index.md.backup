@@ -889,3 +889,74 @@ Imagem orignal
 Imagem pontilhada gerada sobre o canny
 
 ![Image](images/ex8/cannypontos.png)
+
+## Tutorial 9
+### Exemplo 9.1
+Utilizando o programa kmeans.cpp como exemplo prepare um programa exemplo onde a execução do código se dê usando o parâmetro nRodadas=1 e inciar os centros de forma aleatória usando o parâmetro KMEANS_RANDOM_CENTERS ao invés de KMEANS_PP_CENTERS. Realize 10 rodadas diferentes do algoritmo e compare as imagens produzidas. Explique porque elas podem diferir tanto.
+
+**Implementação**
+
+~~~C++
+#include <opencv2/opencv.hpp>
+#include <cstdlib>
+#include <iostream>
+
+using namespace cv;
+using namespace std;
+
+int main( int argc, char** argv ){
+	if(argc!=2){
+		exit(0);
+	}
+
+	int nClusters = 15;
+	Mat rotulos;
+	int nRodadas = 1;
+	Mat centros;
+	
+	for(int i = 0; i < 10; i++) {
+		Mat img = imread( argv[1], IMREAD_COLOR);
+		Mat samples(img.rows * img.cols, 3, CV_32F);
+
+		for( int y = 0; y < img.rows; y++ ){
+			for( int x = 0; x < img.cols; x++ ){
+		    	for( int z = 0; z < 3; z++){
+		      		samples.at<float>(y + x*img.rows, z) = img.at<Vec3b>(y,x)[z];
+		 		}
+			}
+		}
+
+		kmeans(samples,
+		 		nClusters,
+		 		rotulos,
+		 		TermCriteria(cv::TermCriteria::MAX_ITER|cv::TermCriteria::EPS, 10000, 0.0001),
+		 		nRodadas,
+		 		KMEANS_RANDOM_CENTERS,
+		 		centros );
+
+
+		Mat rotulada( img.size(), img.type() );
+		for( int y = 0; y < img.rows; y++ ){
+		 	for( int x = 0; x < img.cols; x++ ){
+		 		int indice = rotulos.at<int>(y + x*img.rows,0);
+		 		rotulada.at<Vec3b>(y,x)[0] = (uchar) centros.at<float>(indice, 0);
+		 		rotulada.at<Vec3b>(y,x)[1] = (uchar) centros.at<float>(indice, 1);
+		 		rotulada.at<Vec3b>(y,x)[2] = (uchar) centros.at<float>(indice, 2);
+			}
+		}
+
+		cout << "Gerando imagem " << i << endl;
+		string number_img = to_string(i);
+		string name_img = string(argv[1]);
+
+		string name = number_img + "_" + name_img;
+		
+		imwrite(name, rotulada);
+	}
+}
+~~~
+
+**Resultados**
+![Imagem](images/ex9/flores.gif)
+
+O gif acima é um loop entre as 10 imagens gerados pelo código impletado acima. Podemos perceber uma diferença sutil entre as imagens, principalmente com cores mais vibrantes, como é o caso das flores laranja. A diferença ocorre porque além da função *kmeans* do opencv executar apenas uma vez, ou seja, em cada loop a imagem será rotulada apenas uma vez, o uso da *flag* **KMEANS_RANDOM_CENTERS** faz com que os centros sejam aleatórios, gerando assim uma pequena diferença na clusterização de cada pixel de forma que o resultado final de cada imagem possui diferenças entre si.
